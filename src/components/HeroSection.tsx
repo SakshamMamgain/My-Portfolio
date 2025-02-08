@@ -13,7 +13,7 @@ interface HeroSectionProps {
 const HeroSection = ({
   name = "Saksham Mamgain",
   title = "Full Stack Developer",
-  imageUrl = "https://raw.githubusercontent.com/TempoLabsAI/portfolio-assets/main/saksham-profile.jpg",
+  imageUrl = "https://media-hosting.imagekit.io//cc7fcde86eec46f5/WhatsApp%20Image%202025-02-08%20at%2009.09.34_1ccbefd4.jpg?Expires=1833595368&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=ExWh8pU6M3kvzybgODYSMxA57dwBVNI6MCNehakTO3vqGcGfmR~DWvi0iaTG7-6eZv26B2oGM2k--VX1QxtcjC6kHLxOZVtSnlkdaI0ez93yDQHHjZ4umPbIUtgooKw5bi~FsOKmyYwVtJwq~JeRHLGCbDQknUkSJt86ZZj2V75BJ1NhZCbwG0PySPPz89ziOlO7GxCeLJlH6bNUabb-AncMSCAtSvihFytIF5uDC8Upg6grjS1MPnlDtCoEF81Wju-eADXFYa47wJBfJ-T9li2YRzXTBkvF6CqmjAoV6u25SsU-5dhVRPjOdfxJni6wkG~umsH1~n~96GpvX-i4Iw__",
   handleViewWork,
 }: HeroSectionProps) => {
   const containerVariants = {
