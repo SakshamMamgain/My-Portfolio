@@ -12,9 +12,26 @@ if (process.env.TEMPO === "true") {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: process.env.NODE_ENV === "development" ? "/" : process.env.VITE_BASE_PATH || "/",
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "framer-motion"],
+          ui: ["@/components/ui"],
+        },
+      },
+    },
+  },
+  base:
+    process.env.NODE_ENV === "development"
+      ? "/"
+      : process.env.VITE_BASE_PATH || "/",
   optimizeDeps: {
-    entries: ["src/main.tsx", "src/tempobook/**/*"],
+    include: [
+      "@radix-ui/react-icons",
+      "@radix-ui/react-tooltip",
+      "@radix-ui/react-dialog",
+    ],
   },
   plugins: [
     react({
@@ -31,5 +48,5 @@ export default defineConfig({
   server: {
     // @ts-ignore
     allowedHosts: true,
-  }
+  },
 });

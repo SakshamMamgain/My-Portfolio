@@ -20,37 +20,36 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
-import { Textarea } from "./ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 const formSchema = z.object({
-  repoUrl: z
-    .string()
-    .url("Please enter a valid URL")
-    .regex(/github\.com/, "Must be a GitHub repository URL"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
-  demoUrl: z
-    .string()
-    .url("Please enter a valid URL")
-    .optional()
-    .or(z.literal("")),
+  name: z.string().min(2, "Skill name must be at least 2 characters"),
+  proficiency: z.string().transform((val) => parseInt(val)),
+  category: z.enum(["Frontend", "Backend", "DevOps", "Other"]),
 });
 
-interface AddProjectDialogProps {
-  onAddProject: (repoUrl: string, description: string, demoUrl: string) => void;
+interface AddSkillDialogProps {
+  onAddSkill: (name: string, proficiency: number, category: string) => void;
 }
 
-export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
+export function AddSkillDialog({ onAddSkill }: AddSkillDialogProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      repoUrl: "",
-      description: "",
-      demoUrl: "",
+      name: "",
+      proficiency: "50",
+      category: "Frontend",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    onAddProject(values.repoUrl, values.description, values.demoUrl || "");
+    onAddSkill(values.name, values.proficiency, values.category);
     form.reset();
   }
 
@@ -63,24 +62,40 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
           className="flex items-center gap-2 mx-auto mb-8"
         >
           <Plus className="h-5 w-5" />
-          Add GitHub Project
+          Add New Skill
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add GitHub Project</DialogTitle>
+          <DialogTitle>Add New Skill</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name="repoUrl"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>GitHub Repository URL</FormLabel>
+                  <FormLabel>Skill Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. React, Node.js" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="proficiency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Proficiency Level (0-100)</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="https://github.com/username/repo"
+                      type="number"
+                      min="0"
+                      max="100"
+                      placeholder="50"
                       {...field}
                     />
                   </FormControl>
@@ -90,36 +105,32 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
             />
             <FormField
               control={form.control}
-              name="description"
+              name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Describe your project..."
-                      className="min-h-[100px]"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="demoUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Demo URL (Optional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://your-demo-url.com" {...field} />
-                  </FormControl>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Frontend">Frontend</SelectItem>
+                      <SelectItem value="Backend">Backend</SelectItem>
+                      <SelectItem value="DevOps">DevOps</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <Button type="submit" className="w-full">
-              Add Project
+              Add Skill
             </Button>
           </form>
         </Form>

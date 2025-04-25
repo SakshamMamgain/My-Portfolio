@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -72,7 +76,34 @@
   }
   body {
     @apply bg-background text-foreground;
-    overflow: hidden;
+  }
+
+  /* Prevent text selection and focus indicators */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  span,
+  div {
+    @apply select-none focus:outline-none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* Allow text selection only in editable elements */
+  input,
+  textarea,
+  [contenteditable="true"] {
+    @apply select-text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */

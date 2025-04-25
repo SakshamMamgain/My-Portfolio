@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import AnimatedBackground from "./AnimatedBackground";
+import React, { useState, useEffect } from "react";
 import Navigation from "./Navigation";
+import AboutSection from "./AboutSection";
 import HeroSection from "./HeroSection";
 import ProjectsSection from "./ProjectsSection";
 import SkillsSection from "./SkillsSection";
@@ -10,47 +10,57 @@ import { motion } from "framer-motion";
 const Home = () => {
   const [canScroll, setCanScroll] = useState(false);
 
+  useEffect(() => {
+    document.body.style.overflow = canScroll ? "auto" : "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [canScroll]);
+
   const handleViewWork = () => {
     setCanScroll(true);
-    const projectsSection = document.getElementById("projects");
-    projectsSection?.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      const aboutSection = document.getElementById("about");
+      aboutSection?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   };
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className={`relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm h-screen ${canScroll ? "overflow-y-scroll" : "overflow-hidden"}`}
-    >
-      <AnimatedBackground />
-      <Navigation />
+    <div className="relative min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="relative z-10">
+        <Navigation />
 
-      <main className="pt-20">
-        <section id="hero" className="snap-start h-screen">
-          <HeroSection
-            handleViewWork={handleViewWork}
-            name="Saksham Mamgain"
-            title="Full Stack Developer"
-          />
-        </section>
+        <main>
+          <section id="hero" className="min-h-screen">
+            <HeroSection
+              handleViewWork={handleViewWork}
+              name="Saksham Mamgain"
+              title="AI/ML Engineer"
+            />
+          </section>
 
-        <section id="projects" className="snap-start min-h-screen">
-          <ProjectsSection />
-        </section>
+          <section id="about" className="min-h-screen">
+            <AboutSection />
+          </section>
 
-        <section id="skills" className="snap-start min-h-screen">
-          <SkillsSection />
-        </section>
+          <section id="projects" className="min-h-screen">
+            <ProjectsSection />
+          </section>
 
-        <section id="contact" className="snap-start min-h-screen">
-          <ContactSection />
-        </section>
-      </main>
+          <section id="skills" className="min-h-screen">
+            <SkillsSection />
+          </section>
 
-      <footer className="bg-gray-100 dark:bg-gray-800 py-8 text-center text-gray-600 dark:text-gray-300">
-        <p>© {new Date().getFullYear()} Portfolio. All rights reserved.</p>
-      </footer>
-    </motion.div>
+          <section id="contact" className="min-h-screen">
+            <ContactSection />
+          </section>
+        </main>
+
+        <footer className="bg-gray-100/80 dark:bg-gray-800/80 py-8 text-center text-gray-600 dark:text-gray-300">
+          <p>© {new Date().getFullYear()} Portfolio. All rights reserved.</p>
+        </footer>
+      </div>
+    </div>
   );
 };
 

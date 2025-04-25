@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Github, Linkedin, Mail, Instagram } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { useToast } from "@/components/ui/use-toast";
 
 import { Button } from "./ui/button";
 import {
@@ -24,15 +26,11 @@ const formSchema = z.object({
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
 
-interface ContactSectionProps {
-  onSubmit?: (data: z.infer<typeof formSchema>) => void;
-  isSubmitting?: boolean;
-}
+interface ContactSectionProps {}
 
-const ContactSection = ({
-  onSubmit = (data) => console.log("Form submitted:", data),
-  isSubmitting = false,
-}: ContactSectionProps) => {
+const ContactSection = ({}: ContactSectionProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,6 +39,34 @@ const ContactSection = ({
       message: "",
     },
   });
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    if (isSubmitting) return;
+
+    try {
+      setIsSubmitting(true);
+      const { error } = await supabase
+        .from("contact_submissions")
+        .insert([data]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Message sent!",
+        description: "Thank you for reaching out. I'll get back to you soon.",
+      });
+      form.reset();
+    } catch (error) {
+      console.error("Contact submission error:", error);
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const socialLinks = [
     {
@@ -174,15 +200,6 @@ const ContactSection = ({
                   {link.label}
                 </Button>
               ))}
-            </div>
-
-            <div className="mt-8 p-6 bg-gray-100 dark:bg-gray-800 rounded-lg">
-              <h4 className="text-lg font-semibold mb-2">Office Hours</h4>
-              <p className="text-gray-600 dark:text-gray-300">
-                Monday - Friday
-                <br />
-                9:00 AM - 5:00 PM EST
-              </p>
             </div>
           </div>
         </div>

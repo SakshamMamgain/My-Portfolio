@@ -12,7 +12,7 @@ interface HeroSectionProps {
 
 const HeroSection = ({
   name = "Saksham Mamgain",
-  title = "Full Stack Developer",
+  title = "AI/ML Engineer",
   imageUrl = "https://media-hosting.imagekit.io//cc7fcde86eec46f5/WhatsApp%20Image%202025-02-08%20at%2009.09.34_1ccbefd4.jpg?Expires=1833595368&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=ExWh8pU6M3kvzybgODYSMxA57dwBVNI6MCNehakTO3vqGcGfmR~DWvi0iaTG7-6eZv26B2oGM2k--VX1QxtcjC6kHLxOZVtSnlkdaI0ez93yDQHHjZ4umPbIUtgooKw5bi~FsOKmyYwVtJwq~JeRHLGCbDQknUkSJt86ZZj2V75BJ1NhZCbwG0PySPPz89ziOlO7GxCeLJlH6bNUabb-AncMSCAtSvihFytIF5uDC8Upg6grjS1MPnlDtCoEF81Wju-eADXFYa47wJBfJ-T9li2YRzXTBkvF6CqmjAoV6u25SsU-5dhVRPjOdfxJni6wkG~umsH1~n~96GpvX-i4Iw__",
   handleViewWork,
 }: HeroSectionProps) => {
@@ -38,7 +38,7 @@ const HeroSection = ({
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 sm:px-6 lg:px-8">
+    <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <motion.div
         className="max-w-7xl mx-auto text-center"
         variants={containerVariants}
@@ -47,10 +47,12 @@ const HeroSection = ({
       >
         <motion.div variants={itemVariants} className="mb-8">
           <div className="relative w-48 h-48 mx-auto mb-8">
+            {/* Black and white gradient background */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-b from-black to-white opacity-10 transform scale-110" />
             <motion.img
               src={imageUrl}
               alt={name}
-              className="rounded-full shadow-2xl border-4 border-white dark:border-gray-700 object-cover w-48 h-48"
+              className="relative z-10 rounded-full shadow-2xl border-4 border-white dark:border-gray-700 object-cover w-48 h-48"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
             />
